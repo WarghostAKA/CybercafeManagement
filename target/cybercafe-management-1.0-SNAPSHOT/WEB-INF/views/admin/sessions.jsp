@@ -22,6 +22,12 @@
         .sidebar .nav-link.active {
             background-color: #0d6efd;
         }
+        .search-section {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
     </style>
 </head>
 <body>
@@ -60,12 +66,46 @@
             <div class="col-md-10 p-4">
                 <h2 class="mb-4">Usage Records</h2>
 
+                <!-- Search Section -->
+                <div class="search-section">
+                    <form id="searchForm" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="searchComputer" class="form-label">Computer Number</label>
+                            <input type="text" class="form-control" id="searchComputer" placeholder="Search by computer">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="searchUser" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="searchUser" placeholder="Search by username">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="searchStatus" class="form-label">Status</label>
+                            <select class="form-select" id="searchStatus">
+                                <option value="">All</option>
+                                <option value="Active">Active</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="searchCost" class="form-label">Total Cost ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="searchCost" placeholder="Search by cost">
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" onclick="searchSessions()">
+                                <i class="bi bi-search"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetSearch()">
+                                <i class="bi bi-x-circle"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
                 <c:if test="${param.deleted}">
                     <div class="alert alert-success">Session record deleted successfully!</div>
                 </c:if>
 
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="sessionsTable">
                         <thead>
                             <tr>
                                 <th>Computer</th>
@@ -117,6 +157,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/search-utils.js"></script>
     <script>
         function confirmLogout() {
             if (confirm('Are you sure you want to logout?')) {
@@ -145,6 +186,28 @@
                 document.body.appendChild(form);
                 form.submit();
             }
+        }
+
+        function searchSessions() {
+            const searchCriteria = {
+                computer: document.getElementById('searchComputer').value,
+                user: document.getElementById('searchUser').value,
+                status: document.getElementById('searchStatus').value,
+                cost: document.getElementById('searchCost').value
+            };
+
+            const columnIndices = {
+                computer: 0,
+                user: 1,
+                status: 6,
+                cost: 5
+            };
+
+            searchTable('sessionsTable', searchCriteria, columnIndices);
+        }
+
+        function resetSearch() {
+            resetSearchForm('searchForm', 'sessionsTable');
         }
     </script>
 </body>

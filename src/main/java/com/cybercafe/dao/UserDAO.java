@@ -8,7 +8,7 @@ import java.util.List;
 public class UserDAO {
     
     public void registerUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, password, email, is_admin) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, password, email, phone, gender, is_admin) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -16,7 +16,9 @@ public class UserDAO {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getEmail());
-            pstmt.setBoolean(4, user.isAdmin());
+            pstmt.setString(4, user.getPhone());
+            pstmt.setString(5, user.getGender());
+            pstmt.setBoolean(6, user.isAdmin());
             pstmt.executeUpdate();
         }
     }
@@ -36,6 +38,8 @@ public class UserDAO {
                     user.setId(rs.getInt("id"));
                     user.setUsername(rs.getString("username"));
                     user.setEmail(rs.getString("email"));
+                    user.setPhone(rs.getString("phone"));
+                    user.setGender(rs.getString("gender"));
                     user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                     user.setAdmin(rs.getBoolean("is_admin"));
                     return user;
@@ -47,7 +51,8 @@ public class UserDAO {
 
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users WHERE is_admin = FALSE ORDER BY created_at DESC";
+        // 修改 SQL 查询，移除 is_admin = FALSE 的条件，但排除当前登录的管理员账户
+        String sql = "SELECT * FROM users WHERE username != 'admin' ORDER BY created_at DESC";
         
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -58,6 +63,8 @@ public class UserDAO {
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setGender(rs.getString("gender"));
                 user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 user.setAdmin(rs.getBoolean("is_admin"));
                 users.add(user);
@@ -67,7 +74,7 @@ public class UserDAO {
     }
 
     public void deleteUser(int userId) throws SQLException {
-        String sql = "DELETE FROM users WHERE id = ? AND is_admin = FALSE";
+        String sql = "DELETE FROM users WHERE id = ? AND username != 'admin'";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,7 +85,7 @@ public class UserDAO {
     }
 
     public void updateUserEmail(int userId, String email) throws SQLException {
-        String sql = "UPDATE users SET email = ? WHERE id = ? AND is_admin = FALSE";
+        String sql = "UPDATE users SET email = ? WHERE id = ? AND username != 'admin'";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -102,13 +109,15 @@ public class UserDAO {
     }
     
     public void updateProfile(User user) throws SQLException {
-        String sql = "UPDATE users SET email = ? WHERE id = ?";
+        String sql = "UPDATE users SET email = ?, phone = ?, gender = ? WHERE id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, user.getEmail());
-            pstmt.setInt(2, user.getId());
+            pstmt.setString(2, user.getPhone());
+            pstmt.setString(3, user.getGender());
+            pstmt.setInt(4, user.getId());
             pstmt.executeUpdate();
         }
     }
