@@ -25,12 +25,12 @@ public class AdminServlet extends HttpServlet {
     private ComputerDAO computerDAO = new ComputerDAO();
     private SessionDAO sessionDAO = new SessionDAO();
     private RevenueService revenueService = new RevenueService();
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException {
+            throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        
+
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
                 showDashboard(request, response);
@@ -49,35 +49,35 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Database error", e);
         }
     }
-    
+
     private void showDashboard(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException {
+            throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(request, response);
     }
-    
+
     private void showUsers(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException {
         List<User> users = userDAO.getAllUsers();
         request.setAttribute("users", users);
         request.getRequestDispatcher("/WEB-INF/views/admin/users.jsp").forward(request, response);
     }
-    
+
     private void showComputers(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException {
         List<Computer> computers = computerDAO.getAllComputers();
         request.setAttribute("computers", computers);
         request.getRequestDispatcher("/WEB-INF/views/admin/computers.jsp").forward(request, response);
     }
-    
+
     private void showSessions(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException {
         List<Session> sessions = sessionDAO.getAllSessions();
         request.setAttribute("sessions", sessions);
         request.getRequestDispatcher("/WEB-INF/views/admin/sessions.jsp").forward(request, response);
     }
-    
+
     private void showRevenue(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException {
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
         
@@ -94,13 +94,13 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("statistics", revenueService.calculateStatistics(revenues));
         request.getRequestDispatcher("/WEB-INF/views/admin/revenue.jsp").forward(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-       throws ServletException, IOException {
+            throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         String action = request.getParameter("action");
-        
+
         try {
             if ("/users".equals(pathInfo)) {
                 handleUserAction(request, response, action);
@@ -113,9 +113,9 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Database error", e);
         }
     }
-    
+
     private void handleUserAction(HttpServletRequest request, HttpServletResponse response, String action)
-       throws SQLException, IOException {
+            throws SQLException, IOException {
         if ("delete".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("userId"));
             userDAO.deleteUser(userId);
@@ -127,9 +127,9 @@ public class AdminServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/users?updated=true");
         }
     }
-    
+
     private void handleComputerAction(HttpServletRequest request, HttpServletResponse response, String action)
-       throws SQLException, IOException {
+            throws SQLException, IOException {
         if ("delete".equals(action)) {
             int computerId = Integer.parseInt(request.getParameter("computerId"));
             computerDAO.deleteComputer(computerId);
@@ -142,9 +142,9 @@ public class AdminServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/computers?updated=true");
         }
     }
-    
+
     private void handleSessionAction(HttpServletRequest request, HttpServletResponse response, String action)
-       throws SQLException, IOException {
+            throws SQLException, IOException {
         if ("delete".equals(action)) {
             int sessionId = Integer.parseInt(request.getParameter("sessionId"));
             sessionDAO.deleteSession(sessionId);

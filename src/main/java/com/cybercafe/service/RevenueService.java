@@ -2,11 +2,10 @@ package com.cybercafe.service;
 
 import com.cybercafe.dao.RevenueDAO;
 import com.cybercafe.model.DailyRevenue;
-import com.cybercafe.model.RevenueStatistics;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import com.cybercafe.model.RevenueStatistics;
 
 public class RevenueService {
     private final RevenueDAO revenueDAO;

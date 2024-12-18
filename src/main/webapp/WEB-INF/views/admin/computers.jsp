@@ -6,65 +6,12 @@
     <title>Computer Management - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-        }
-        .sidebar .nav-link {
-            color: #fff;
-            padding: 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-        }
-        .search-section {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-        }
-        .modal-dialog {
-            display: flex;
-            align-items: center;
-            min-height: calc(100% - 1rem);
-        }
-    </style>
+    <%@ include file="../common/admin-styles.jsp" %>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 px-0 sidebar">
-                <div class="py-4 px-3 mb-4 text-white">
-                    <h5>Admin Dashboard</h5>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/users">
-                            <i class="bi bi-people me-2"></i> User Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/admin/computers">
-                            <i class="bi bi-pc-display me-2"></i> Computer Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/sessions">
-                            <i class="bi bi-clock-history me-2"></i> Usage Records
-                        </a>
-                    </li>
-                    <li class="nav-item mt-4">
-                        <a class="nav-link" href="#" onclick="confirmLogout(); return false;">
-                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <%@ include file="../common/admin-sidebar.jsp" %>
 
             <!-- Main Content -->
             <div class="col-md-10 p-4">
@@ -110,36 +57,36 @@
                 <div class="table-responsive">
                     <table class="table table-striped" id="computersTable">
                         <thead>
-                            <tr>
-                                <th>Computer Number</th>
-                                <th>Status</th>
-                                <th>Hourly Rate</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>Computer Number</th>
+                            <th>Status</th>
+                            <th>Hourly Rate</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${computers}" var="computer">
-                                <tr>
-                                    <td>${computer.computerNumber}</td>
-                                    <td>
+                        <c:forEach items="${computers}" var="computer">
+                            <tr>
+                                <td>${computer.computerNumber}</td>
+                                <td>
                                         <span class="badge ${computer.occupied ? 'bg-danger' : 'bg-success'}">
-                                            ${computer.occupied ? 'In Use' : 'Available'}
+                                                ${computer.occupied ? 'In Use' : 'Available'}
                                         </span>
-                                    </td>
-                                    <td>$${computer.hourlyRate}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" 
-                                                onclick="showEditModal('${computer.id}', '${computer.computerNumber}', '${computer.hourlyRate}')">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" 
-                                                onclick="confirmDelete('${computer.id}')"
-                                                ${computer.occupied ? 'disabled' : ''}>
-                                            <i class="bi bi-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                                </td>
+                                <td>$${computer.hourlyRate}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                            onclick="showEditModal('${computer.id}', '${computer.computerNumber}', '${computer.hourlyRate}')">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete('${computer.id}')"
+                                        ${computer.occupied ? 'disabled' : ''}>
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -178,6 +125,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 保持原有的JavaScript代码不变 -->
     <script>
         function confirmLogout() {
             if (confirm('Are you sure you want to logout?')) {
@@ -197,17 +145,17 @@
                 const form = document.createElement('form');
                 form.method = 'post';
                 form.action = '${pageContext.request.contextPath}/admin/computers';
-                
+
                 const actionInput = document.createElement('input');
                 actionInput.type = 'hidden';
                 actionInput.name = 'action';
                 actionInput.value = 'delete';
-                
+
                 const computerIdInput = document.createElement('input');
                 computerIdInput.type = 'hidden';
                 computerIdInput.name = 'computerId';
                 computerIdInput.value = computerId;
-                
+
                 form.appendChild(actionInput);
                 form.appendChild(computerIdInput);
                 document.body.appendChild(form);
@@ -219,26 +167,26 @@
             const searchNumber = document.getElementById('searchComputerNumber').value.toLowerCase();
             const searchStatus = document.getElementById('searchStatus').value;
             const searchRate = document.getElementById('searchRate').value;
-            
+
             const table = document.getElementById('computersTable');
             const rows = table.getElementsByTagName('tr');
-            
+
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 const cells = row.getElementsByTagName('td');
-                
+
                 const number = cells[0].textContent.toLowerCase();
                 const status = cells[1].textContent.includes('In Use').toString();
                 const rate = cells[2].textContent.replace('$', '');
-                
+
                 const matchNumber = !searchNumber || number.includes(searchNumber);
                 const matchStatus = !searchStatus || status === searchStatus;
                 const matchRate = !searchRate || parseFloat(rate) === parseFloat(searchRate);
-                
-                row.style.display = 
+
+                row.style.display =
                     matchNumber && matchStatus && matchRate
-                    ? '' 
-                    : 'none';
+                        ? ''
+                        : 'none';
             }
         }
 

@@ -52,7 +52,7 @@ public class UserDAO {
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         // 修改 SQL 查询，移除 is_admin = FALSE 的条件，但排除当前登录的管理员账户
-        String sql = "SELECT * FROM users WHERE username != 'admin' ORDER BY created_at DESC";
+        String sql = "SELECT * FROM users WHERE username != 'admin' and is_admin = FALSE ORDER BY created_at DESC";
         
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();

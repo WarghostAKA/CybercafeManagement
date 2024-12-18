@@ -6,65 +6,12 @@
     <title>User Management - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-        }
-        .sidebar .nav-link {
-            color: #fff;
-            padding: 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #495057;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-        }
-        .search-section {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-        }
-        .modal-dialog {
-            display: flex;
-            align-items: center;
-            min-height: calc(100% - 1rem);
-        }
-    </style>
+    <%@ include file="../common/admin-styles.jsp" %>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 px-0 sidebar">
-                <div class="py-4 px-3 mb-4 text-white">
-                    <h5>Admin Dashboard</h5>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/admin/users">
-                            <i class="bi bi-people me-2"></i> User Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/computers">
-                            <i class="bi bi-pc-display me-2"></i> Computer Management
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/sessions">
-                            <i class="bi bi-clock-history me-2"></i> Usage Records
-                        </a>
-                    </li>
-                    <li class="nav-item mt-4">
-                        <a class="nav-link" href="#" onclick="confirmLogout(); return false;">
-                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <%@ include file="../common/admin-sidebar.jsp" %>
 
             <!-- Main Content -->
             <div class="col-md-10 p-4">
@@ -119,36 +66,36 @@
                 <div class="table-responsive">
                     <table class="table table-striped" id="usersTable">
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Gender</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${users}" var="user">
-                                <tr>
-                                    <td>${user.id}</td>
-                                    <td>${user.username}</td>
-                                    <td>${user.email}</td>
-                                    <td>${user.phone}</td>
-                                    <td>${user.gender}</td>
-                                    <td>${user.createdAt}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" 
-                                                onclick="showEditModal('${user.id}', '${user.username}', '${user.email}', '${user.phone}', '${user.gender}')">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
-                                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('${user.id}')">
-                                            <i class="bi bi-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                        <c:forEach items="${users}" var="user">
+                            <tr>
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.phone}</td>
+                                <td>${user.gender}</td>
+                                <td>${user.createdAt}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary"
+                                            onclick="showEditModal('${user.id}', '${user.username}', '${user.email}', '${user.phone}', '${user.gender}')">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="confirmDelete('${user.id}')">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -168,22 +115,22 @@
                     <div class="modal-body">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="userId" id="editUserId">
-                        
+
                         <div class="mb-3">
                             <label for="editUsername" class="form-label">Username</label>
                             <input type="text" class="form-control" id="editUsername" name="username" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="editEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="editEmail" name="email" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="editPhone" class="form-label">Phone</label>
                             <input type="text" class="form-control" id="editPhone" name="phone" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="editGender" class="form-label">Gender</label>
                             <select class="form-select" id="editGender" name="gender" required>
@@ -201,6 +148,7 @@
             </div>
         </div>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -224,17 +172,17 @@
                 const form = document.createElement('form');
                 form.method = 'post';
                 form.action = '${pageContext.request.contextPath}/admin/users';
-                
+
                 const actionInput = document.createElement('input');
                 actionInput.type = 'hidden';
                 actionInput.name = 'action';
                 actionInput.value = 'delete';
-                
+
                 const userIdInput = document.createElement('input');
                 userIdInput.type = 'hidden';
                 userIdInput.name = 'userId';
                 userIdInput.value = userId;
-                
+
                 form.appendChild(actionInput);
                 form.appendChild(userIdInput);
                 document.body.appendChild(form);
@@ -248,30 +196,30 @@
             const searchEmail = document.getElementById('searchEmail').value.toLowerCase();
             const searchPhone = document.getElementById('searchPhone').value.toLowerCase();
             const searchGender = document.getElementById('searchGender').value;
-            
+
             const table = document.getElementById('usersTable');
             const rows = table.getElementsByTagName('tr');
-            
+
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 const cells = row.getElementsByTagName('td');
-                
+
                 const id = cells[0].textContent.toLowerCase();
                 const username = cells[1].textContent.toLowerCase();
                 const email = cells[2].textContent.toLowerCase();
                 const phone = cells[3].textContent.toLowerCase();
                 const gender = cells[4].textContent;
-                
+
                 const matchId = !searchId || id.includes(searchId);
                 const matchUsername = !searchUsername || username.includes(searchUsername);
                 const matchEmail = !searchEmail || email.includes(searchEmail);
                 const matchPhone = !searchPhone || phone.includes(searchPhone);
                 const matchGender = !searchGender || gender === searchGender;
-                
-                row.style.display = 
+
+                row.style.display =
                     matchId && matchUsername && matchEmail && matchPhone && matchGender
-                    ? '' 
-                    : 'none';
+                        ? ''
+                        : 'none';
             }
         }
 
