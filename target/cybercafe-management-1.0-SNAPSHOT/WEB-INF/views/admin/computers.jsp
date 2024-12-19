@@ -15,13 +15,13 @@
 
             <!-- Main Content -->
             <div class="col-md-10 p-4">
-                <h2 class="mb-4">电脑信息管理</h2>
+                <h2 class="mb-4">Computer Management</h2>
 
                 <!-- Search Section -->
                 <div class="search-section">
                     <form id="searchForm" class="row g-3">
                         <div class="col-md-3">
-                            <label for="searchComputerNumber" class="form-label">电脑编号</label>
+                            <label for="searchComputerNumber" class="form-label">Computer Number</label>
                             <input type="text" class="form-control" id="searchComputerNumber" placeholder="Search by number">
                         </div>
                         <div class="col-md-3">
