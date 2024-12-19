@@ -37,6 +37,8 @@ public class AuthServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         String pathInfo = request.getPathInfo();
         
         try {
@@ -92,10 +94,13 @@ public class AuthServlet extends HttpServlet {
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         User user = new User();
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
         user.setEmail(request.getParameter("email"));
+        user.setGender(request.getParameter("gender"));
         user.setAdmin(false); // Regular users can only register as non-admin
         
         userDAO.registerUser(user);
@@ -104,6 +109,8 @@ public class AuthServlet extends HttpServlet {
 
     private void handlePasswordUpdate(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         String newPassword = request.getParameter("newPassword");
@@ -115,6 +122,8 @@ public class AuthServlet extends HttpServlet {
 
     private void handleProfileUpdate(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         user.setEmail(request.getParameter("email"));
