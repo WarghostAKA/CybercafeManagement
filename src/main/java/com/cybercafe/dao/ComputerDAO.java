@@ -62,4 +62,17 @@ public class ComputerDAO {
             pstmt.executeUpdate();
         }
     }
+    
+    public void addComputer(Computer computer) throws SQLException {
+        String sql = "INSERT INTO computers (computer_number, hourly_rate, is_occupied) VALUES (?, ?, ?)";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, computer.getComputerNumber());
+            pstmt.setDouble(2, computer.getHourlyRate());
+            pstmt.setBoolean(3, computer.isOccupied());
+            pstmt.executeUpdate();
+        }
+    }
 }

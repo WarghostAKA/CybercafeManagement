@@ -8,7 +8,10 @@ import com.cybercafe.model.Computer;
 import com.cybercafe.model.Session;
 import com.cybercafe.model.User;
 import com.cybercafe.model.DailyRevenue;
+import com.cybercafe.service.ComputerService;
 import com.cybercafe.service.RevenueService;
+import com.cybercafe.service.UserService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +28,9 @@ public class AdminServlet extends HttpServlet {
     private ComputerDAO computerDAO = new ComputerDAO();
     private SessionDAO sessionDAO = new SessionDAO();
     private RevenueService revenueService = new RevenueService();
+    private UserService userService = new UserService();
+    private ComputerService computerService = new ComputerService();
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -117,9 +123,9 @@ public class AdminServlet extends HttpServlet {
             throw new ServletException("Database error", e);
         }
     }
-
+    
     private void handleUserAction(HttpServletRequest request, HttpServletResponse response, String action)
-            throws SQLException, IOException {
+       throws SQLException, IOException {
         if ("delete".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("userId"));
             userDAO.deleteUser(userId);
@@ -129,11 +135,21 @@ public class AdminServlet extends HttpServlet {
             String email = request.getParameter("email");
             userDAO.updateUserEmail(userId, email);
             response.sendRedirect(request.getContextPath() + "/admin/users?updated=true");
+        } else if ("add".equals(action)) {
+            User user = new User();
+            user.setUsername(request.getParameter("username"));
+            user.setPassword(request.getParameter("password"));
+            user.setEmail(request.getParameter("email"));
+            user.setPhone(request.getParameter("phone"));
+            user.setGender(request.getParameter("gender"));
+            
+            userService.addUser(user);
+            response.sendRedirect(request.getContextPath() + "/admin/users?added=true");
         }
     }
-
+    
     private void handleComputerAction(HttpServletRequest request, HttpServletResponse response, String action)
-            throws SQLException, IOException {
+       throws SQLException, IOException {
         if ("delete".equals(action)) {
             int computerId = Integer.parseInt(request.getParameter("computerId"));
             computerDAO.deleteComputer(computerId);
@@ -144,6 +160,13 @@ public class AdminServlet extends HttpServlet {
             double hourlyRate = Double.parseDouble(request.getParameter("hourlyRate"));
             computerDAO.updateComputer(computerId, computerNumber, hourlyRate);
             response.sendRedirect(request.getContextPath() + "/admin/computers?updated=true");
+        } else if ("add".equals(action)) {
+            Computer computer = new Computer();
+            computer.setComputerNumber(request.getParameter("computerNumber"));
+            computer.setHourlyRate(Double.parseDouble(request.getParameter("hourlyRate")));
+            
+            computerService.addComputer(computer);
+            response.sendRedirect(request.getContextPath() + "/admin/computers?added=true");
         }
     }
 
