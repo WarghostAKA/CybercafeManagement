@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseUtil {
-    private static final String URL = "jdbc.url=jdbc:mysql://localhost:3306/cybercafe_db?useUnicode=true&characterEncoding=gb2312";
+    private static final String URL = "jdbc:mysql://localhost:3306/cybercafe_db?useUnicode=true&characterEncoding=gb2312";
     private static final String USER = "root";
     private static final String PASSWORD = "313268";
 
