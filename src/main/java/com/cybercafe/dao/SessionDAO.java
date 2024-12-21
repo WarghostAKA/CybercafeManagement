@@ -138,4 +138,15 @@ public class SessionDAO {
             pstmt.executeUpdate();
         }
     }
+    
+    public void paySession(int sessionId) throws SQLException {
+        String sql = "UPDATE sessions SET is_active = false WHERE id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, sessionId);
+            pstmt.executeUpdate();
+        }
+    }
 }
