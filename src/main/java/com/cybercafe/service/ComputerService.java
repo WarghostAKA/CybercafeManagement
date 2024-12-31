@@ -12,7 +12,7 @@ public class ComputerService {
 	}
 	
 	public void addComputer(Computer computer) throws SQLException {
-		computer.setOccupied(false); // New computers are always available
+		computer.setOccupied(false);
 		computerDAO.addComputer(computer);
 	}
 }

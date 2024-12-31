@@ -94,6 +94,6 @@ public class SessionServlet extends HttpServlet {
     private double calculateCost(LocalDateTime startTime) {
         long minutes = ChronoUnit.MINUTES.between(startTime, LocalDateTime.now());
         double hours = Math.ceil(minutes / 60.0);
-        return hours * 10.0; // Assuming hourly rate is $10
+        return hours * 10.0;
     }
 }

@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -130,12 +131,29 @@ public class AdminServlet extends HttpServlet {
             int userId = Integer.parseInt(request.getParameter("userId"));
             userDAO.deleteUser(userId);
             response.sendRedirect(request.getContextPath() + "/admin/users?deleted=true");
+            
         } else if ("update".equals(action)) {
+            //在管理员界面修改原账户信息
             int userId = Integer.parseInt(request.getParameter("userId"));
             String email = request.getParameter("email");
-            userDAO.updateUserEmail(userId, email);
+            String phone = request.getParameter("phone");
+            String gender = request.getParameter("gender");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            
+            User user = new User();
+            user.setId(userId);
+            user.setEmail(email);
+            user.setPhone(phone);
+            user.setGender(gender);
+            user.setUsername(username);
+            user.setPassword(password);
+            
+            userDAO.updateProfile(user);    //实现全部信息的修改
             response.sendRedirect(request.getContextPath() + "/admin/users?updated=true");
+            
         } else if ("add".equals(action)) {
+            //在管理员界面创建新的账户
             User user = new User();
             user.setUsername(request.getParameter("username"));
             user.setPassword(request.getParameter("password"));

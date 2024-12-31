@@ -42,7 +42,6 @@
                             <option value="">All</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
-                            <option value="Other">Other</option>
                         </select>
                     </div>
                     <div class="col-12">
@@ -94,7 +93,7 @@
                             <td>${user.createdAt}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary"
-                                        onclick="showEditModal('${user.id}', '${user.username}', '${user.email}', '${user.phone}', '${user.gender}')">
+                                        onclick="showEditModal('${user.id}', '${user.username}', '${user.email}', '${user.phone}', '${user.password}', '${user.gender}')">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
                                 <button class="btn btn-sm btn-danger" onclick="confirmDelete('${user.id}')">
@@ -110,7 +109,7 @@
     </div>
 </div>
 
-<!-- Add User Modal -->
+<!-- 添加用户功能 -->
 <div class="modal fade" id="addUserModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -160,8 +159,7 @@
     </div>
 </div>
 
-<!-- Existing Edit User Modal remains the same -->
-<!-- Edit User Modal -->
+<!-- 修改账户信息功能 -->
 <div class="modal fade" id="editUserModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -190,6 +188,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="editPassword" class="form-label">Password</label>
+                        <input type="text" class="form-control" id="editPassword" name="password" required>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="editGender" class="form-label">Gender</label>
                         <select class="form-select" id="editGender" name="gender" required>
                             <option value="Male">Male</option>
@@ -210,19 +213,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Existing JavaScript functions remain the same
+
     function confirmLogout() {
         if (confirm('Are you sure you want to logout?')) {
             window.location.href = '${pageContext.request.contextPath}/auth/logout';
         }
     }
 
-    function showEditModal(userId, username, email, phone, gender) {
+    function showEditModal(userId, username, email, phone, password ,gender) {
         document.getElementById('editUserId').value = userId;
         document.getElementById('editUsername').value = username;
         document.getElementById('editEmail').value = email;
         document.getElementById('editPhone').value = phone;
+        document.getElementById('editPassword').value = password;
         document.getElementById('editGender').value = gender;
+
         new bootstrap.Modal(document.getElementById('editUserModal')).show();
     }
 

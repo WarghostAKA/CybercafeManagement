@@ -65,6 +65,7 @@ public class UserDAO {
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
                 user.setGender(rs.getString("gender"));
+                user.setPassword(rs.getString("password"));
                 user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 user.setAdmin(rs.getBoolean("is_admin"));
                 users.add(user);
@@ -83,18 +84,7 @@ public class UserDAO {
             pstmt.executeUpdate();
         }
     }
-
-    public void updateUserEmail(int userId, String email) throws SQLException {
-        String sql = "UPDATE users SET email = ? WHERE id = ? AND username != 'admin'";
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, email);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-        }
-    }
+    
     
     public void updatePassword(int userId, String newPassword) throws SQLException {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
@@ -109,7 +99,7 @@ public class UserDAO {
     }
     
     public void updateProfile(User user) throws SQLException {
-        String sql = "UPDATE users SET email = ?, phone = ?, gender = ? WHERE id = ?";
+        String sql = "UPDATE users SET email = ?, phone = ?, gender = ?, username = ?, password = ? WHERE id = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,7 +107,9 @@ public class UserDAO {
             pstmt.setString(1, user.getEmail());
             pstmt.setString(2, user.getPhone());
             pstmt.setString(3, user.getGender());
-            pstmt.setInt(4, user.getId());
+            pstmt.setString(4, user.getUsername());
+            pstmt.setString(5, user.getPassword());
+            pstmt.setInt(6, user.getId());
             pstmt.executeUpdate();
         }
     }

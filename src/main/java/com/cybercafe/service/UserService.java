@@ -14,7 +14,7 @@ public class UserService {
 	
 	public void addUser(User user) throws SQLException {
 		user.setCreatedAt(LocalDateTime.now());
-		user.setAdmin(false); // Regular users only
+		user.setAdmin(false);
 		userDAO.registerUser(user);
 	}
 }

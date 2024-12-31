@@ -66,7 +66,7 @@ public class AuthServlet extends HttpServlet {
         
         User user = userDAO.login(username, password);
         if (user != null) {
-            // Check if trying to login as admin
+            // 检查是否为管理员
             if (isAdminLogin) {
                 if (user.isAdmin()) {
                     HttpSession session = request.getSession();
@@ -101,7 +101,7 @@ public class AuthServlet extends HttpServlet {
         user.setPassword(request.getParameter("password"));
         user.setEmail(request.getParameter("email"));
         user.setGender(request.getParameter("gender"));
-        user.setAdmin(false); // Regular users can only register as non-admin
+        user.setAdmin(false); // 仅支持注册非管理员账户
         
         userDAO.registerUser(user);
         response.sendRedirect(request.getContextPath() + "/login.jsp?registered=true");
@@ -127,6 +127,8 @@ public class AuthServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         user.setEmail(request.getParameter("email"));
+        user.setPhone(request.getParameter("phone"));
+        user.setGender(request.getParameter("gender"));
         
         userDAO.updateProfile(user);
         session.setAttribute("user", user);
